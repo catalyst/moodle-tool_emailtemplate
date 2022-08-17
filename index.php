@@ -23,12 +23,30 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-defined('MOODLE_INTERNAL') || die();
+require_once(dirname(__FILE__) . '/../../../config.php');
 
-$plugin->version = 2022081701;
-$plugin->release = 2022081701;
-$plugin->requires = 2017051500;    // Our lowest supported Moodle (3.3.0).
-$plugin->supported = [35, 401];    // Available as of Moodle 3.9.0 or later.
-$plugin->component = 'tool_emailtemplate';
-$plugin->maturity = MATURITY_STABLE;
-$plugin->dependencies = [];
+require_login();
+
+$pluginname = get_string('pluginname', 'tool_emailtemplate');
+
+$url = new moodle_url('/admin/tool/emailtemplate/index.php');
+$context = context_system::instance();
+$context = context_user::instance($USER->id);
+$PAGE->set_context($context);
+$PAGE->set_pagelayout('standard');
+$PAGE->set_url($url);
+$PAGE->navigation->extend_for_user($USER);
+$PAGE->navbar->add(get_string('profile'), new moodle_url('/user/profile.php', array('id' => $USER->id)));
+$PAGE->navbar->add($pluginname);
+
+// Check for caps.
+require_capability('tool/emailtemplate:view', context_system::instance());
+echo $OUTPUT->header();
+echo $OUTPUT->heading($pluginname);
+
+echo '<pre>';
+echo 'template goes here';
+echo '</pre>';
+
+echo $OUTPUT->footer();
+

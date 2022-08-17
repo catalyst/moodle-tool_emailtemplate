@@ -23,12 +23,22 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-defined('MOODLE_INTERNAL') || die();
 
-$plugin->version = 2022081701;
-$plugin->release = 2022081701;
-$plugin->requires = 2017051500;    // Our lowest supported Moodle (3.3.0).
-$plugin->supported = [35, 401];    // Available as of Moodle 3.9.0 or later.
-$plugin->component = 'tool_emailtemplate';
-$plugin->maturity = MATURITY_STABLE;
-$plugin->dependencies = [];
+/**
+ * Add nodes to myprofile page.
+ *
+ * @param \core_user\output\myprofile\tree $tree Tree object
+ * @param stdClass $user user object
+ * @param bool $iscurrentuser
+ * @param stdClass $course Course object
+ * @return bool
+ */
+function tool_emailtemplate_myprofile_navigation(core_user\output\myprofile\tree $tree, $user, $iscurrentuser, $course) {
+    if (has_capability('tool/emailtemplate:view', $context_system::instance())) {
+        $url = new moodle_url('/admin/tool/emailtemplate/index.php');
+        $node = new core_user\output\myprofile\node('miscellaneous', 'emailtemplate',
+            get_string('pluginname', 'tool_emailtemplate'), null, $url);
+        $tree->add_node($node);
+    }
+}
+

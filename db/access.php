@@ -15,7 +15,9 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Version
+ * Capabilities.
+ *
+ * This files lists capabilities related to tool_emailtemplates.
  *
  * @package    tool_emailtemplate
  * @author     Brendan Heywood <brendanheywood@catalyst-au.net>
@@ -25,10 +27,16 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->version = 2022081701;
-$plugin->release = 2022081701;
-$plugin->requires = 2017051500;    // Our lowest supported Moodle (3.3.0).
-$plugin->supported = [35, 401];    // Available as of Moodle 3.9.0 or later.
-$plugin->component = 'tool_emailtemplate';
-$plugin->maturity = MATURITY_STABLE;
-$plugin->dependencies = [];
+$capabilities = [
+    'tool/emailtemplate:view' => [
+
+        'captype' => 'read',
+        'contextlevel' => CONTEXT_MODULE,
+        'archetypes' => [
+            'student' => CAP_ALLOW,
+            'teacher' => CAP_ALLOW,
+            'editingteacher' => CAP_ALLOW,
+            'manager' => CAP_ALLOW
+        ],
+    ],
+];
