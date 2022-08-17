@@ -67,7 +67,10 @@ $html = $OUTPUT->render_from_template('tool_emailtemplate/email', $data);
 $html = preg_replace('/\s*($|\n)/', '\1', $html);
 $rows = substr_count($html, "\n") + 2;
 
-echo $OUTPUT->render_from_template('tool_emailtemplate/compose', ['footer' => $html]);
+echo $OUTPUT->render_from_template('tool_emailtemplate/compose', [
+    'footer' => $html,
+    'from' => fullname($USER) . ' <' .$USER->email . '>',
+]);
 
 echo $OUTPUT->notification(get_string('usage', 'tool_emailtemplate'), 'info');
 
