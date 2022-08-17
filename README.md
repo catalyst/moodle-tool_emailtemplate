@@ -1,4 +1,4 @@
-# An email template plugin
+# A html email footer generating plugin
 
 ## What is this plugin?
 
