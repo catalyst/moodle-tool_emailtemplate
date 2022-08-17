@@ -1,0 +1,4 @@
+# An email template plugin
+
+
+
