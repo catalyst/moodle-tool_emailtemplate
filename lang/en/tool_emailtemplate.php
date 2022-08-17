@@ -25,8 +25,9 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-$string['pluginname'] = 'Email templates';
-$string['pluginfile'] = 'Email templates';
+$string['pluginname'] = 'Email footer template';
+$string['pluginfile'] = 'Email footer template';
 
 $string['configtemplate'] = 'Templates';
 $string['configtemplate_help'] = 'A mustache template for the email template';
+$string['usage'] = 'To use this template first make sure that all of your user profile fields are filled in that this template might use such as mobile phone and social links. Then reload this page to see the latest version, then cut and paste html into your email client.';

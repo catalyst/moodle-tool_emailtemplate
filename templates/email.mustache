@@ -26,7 +26,10 @@
     * none
 
     Context variables required for this template:
-    * user and site data
+    * fullname name
+    * countryname
+    * department
+    * site
 
     Example context (json):
     {
@@ -45,35 +48,34 @@
 <table cellpadding=3>
     <tr>
         {{#profileimageurl}}
-            <td><img src="{{profileimageurl}}"></td>
+        <td>
+            <img src="{{profileimageurl}}">
+        </td>
         {{/profileimageurl}}
         <td>
             {{fullname}}<br>
 
             {{#department}}
-                {{department}}<br>
+            {{department}}<br>
             {{/department}}
 
             {{#institution}}
-                <b>{{institution}}</b><br>
+            <b>{{institution}}</b><br>
             {{/institution}}
 
             {{#city}}{{city}}, {{/city}}{{countryname}}<br>
 
             {{#phone2}}
-                Mobile: {{phone2}}<br>
+            Mobile: {{phone2}}<br>
             {{/phone2}}
         </td>
     </tr>
 </table>
 
-
 {{#site.logocompact}}
-    <img src="{{site.logocompact}}" title="{{site.fullname}}">
+<img src="{{site.logocompact}}" title="{{site.fullname}}" style="max-width: 100%">
 {{/site.logocompact}}
-<br>
-<hr>
-<br>
-<p style="color: #777"><small>CONFIDENTIALITY NOTICE: This email is intended for the named recipients only.
+<br><hr><br>
+<p style="color: #777"><small>CONFIDENTIALITY NOTICE:<br> This email is intended for the named recipients only.
 It may contain privileged, confidential or copyright information. </small></p>
 

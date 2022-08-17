@@ -63,16 +63,15 @@ $data['site'] = [
 
 $html = $OUTPUT->render_from_template('tool_emailtemplate/email', $data);
 
-echo '<div class="shadow">';
-echo $html;
-echo '</div>';
+// Clean up blank lines.
+$html = preg_replace('/\s*($|\n)/', '\1', $html);
+$rows = substr_count($html, "\n") + 2;
 
-echo html_writer::tag('textarea', $html, ['style' => 'width: 100%; height: 10em']);
+echo $OUTPUT->render_from_template('tool_emailtemplate/compose', ['footer' => $html]);
 
-echo '<pre>';
-echo var_dump($data);
-echo '</pre>';
+echo $OUTPUT->notification(get_string('usage', 'tool_emailtemplate'), 'info');
 
+echo html_writer::tag('textarea', $html, ['rows' => $rows, 'style' => 'width: 100%; font-family:monospace; font-size: 10px']);
 
 echo $OUTPUT->footer();
 
