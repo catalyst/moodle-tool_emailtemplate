@@ -51,7 +51,7 @@ $data = user_get_user_details($USER);
 
 unset($data['preferences']);
 
-// Set some convenient values:
+// Set some convenient values.
 $data['fullname'] = fullname($USER);
 $data['countryname'] = get_string($data['country'], 'countries');
 $data['site'] = [
