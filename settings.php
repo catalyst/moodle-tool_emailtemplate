@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Language strings
+ * Settings
  *
  * @package    tool_emailtemplate
  * @author     Brendan Heywood <brendanheywood@catalyst-au.net>
@@ -25,8 +25,20 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-$string['pluginname'] = 'Email templates';
-$string['pluginfile'] = 'Email templates';
+if ($hassiteconfig) {
+    if ($ADMIN->fulltree) {
 
-$string['configtemplate'] = 'Templates';
-$string['configtemplate_help'] = 'A mustache template for the email template';
+        $settings = new admin_settingpage('manageemailtemplate', new lang_string('pluginfile', 'tool_emailtemplate'));
+        $ADMIN->add('tools', $settings);
+
+        // TODO turn the mustache template in code into config here.
+        $settings->add(new admin_setting_configtextarea(
+            'tool_emailtemplate/template',
+            get_string('configtemplate', 'tool_emailtemplate'),
+            get_string('configtemplate_help', 'tool_emailtemplate'),
+            ''
+        ));
+
+        $settings = null;
+    }
+}

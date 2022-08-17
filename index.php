@@ -44,9 +44,35 @@ require_capability('tool/emailtemplate:view', context_system::instance());
 echo $OUTPUT->header();
 echo $OUTPUT->heading($pluginname);
 
+$config = get_config('tool_emailtemplate');
+$template = $config->template;
+
+$data = user_get_user_details($USER);
+
+unset($data['preferences']);
+
+// Set some convenient values:
+$data['fullname'] = fullname($USER);
+$data['countryname'] = get_string($data['country'], 'countries');
+$data['site'] = [
+    'logocompact' => $OUTPUT->get_compact_logo_url()->out(),
+    'fullname'  => $SITE->fullname,
+    'shortname' => $SITE->shortname,
+    'wwwroot'   => $CFG->wwwroot,
+];
+
+$html = $OUTPUT->render_from_template('tool_emailtemplate/email', $data);
+
+echo '<div class="shadow">';
+echo $html;
+echo '</div>';
+
+echo html_writer::tag('textarea', $html, ['style' => 'width: 100%; height: 10em']);
+
 echo '<pre>';
-echo 'template goes here';
+echo var_dump($data);
 echo '</pre>';
+
 
 echo $OUTPUT->footer();
 
