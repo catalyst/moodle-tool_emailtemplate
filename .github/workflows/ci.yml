@@ -14,3 +14,4 @@ jobs:
       disable_behat: true
       disable_grunt: true
       disable_mustache: true # Email templates often require old school html.
+      disable_phpunit: true # Very simply so no unit tests needed.
