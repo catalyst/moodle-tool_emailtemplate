@@ -1,0 +1,53 @@
+{{!
+    This file is part of Moodle - http://moodle.org/
+
+    Moodle is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Moodle is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+}}
+{{!
+    @template tool_emailtemplate/compose
+
+    A preview of the email compose page
+
+    Classes required for JS:
+    * none
+
+    Data attributes required for JS:
+    * none
+
+    Context variables required for this template:
+    * footer string
+
+    Example context (json):
+    {
+        "footer": "--\n\nThe footer string"
+    }
+}}
+
+<div class="card">
+    <div class="card-header">
+        <b>To:</b> <span class="badge badge-secondary">Emily Blogs &lt;emily@acme.com&gt;</span>
+    </div>
+    <div class="card-header">
+        <b>Subject:</b> hi this is an email!
+    </div>
+    <div class="m-4">
+        <p>hi Emily!</p>
+        <p>This is a fake email with a bunch of text so you can kinda see what your email footer might look like.</p>
+        <p>In reality it won't look <i>exactly</i> like this because styling html in emails is hard, and the html styles
+            on this site won't be present in the email, but it is a rough guide at least. Really you need to send this
+            email to someone and take a look in a few different email clients to test it properly.</p>
+        {{{footer}}}
+    </div>
+</div>
+<br>

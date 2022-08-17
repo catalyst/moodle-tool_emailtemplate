@@ -1,29 +1,81 @@
---<br>
+{{!
+    This file is part of Moodle - http://moodle.org/
+
+    Moodle is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Moodle is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+}}
+{{!
+    @template tool_emailtemplate/email
+
+    Generates an email footer for a specific user
+
+    Classes required for JS:
+    * none
+
+    Data attributes required for JS:
+    * none
+
+    Context variables required for this template:
+    * fullname name
+    * countryname
+    * department
+    * site
+
+    Example context (json):
+    {
+        "fullname": "Joe blogs",
+        "countryname": "Wakanda",
+        "department": "Catalyst",
+        "site": {
+            "fullname": "This site",
+            "logocompact": "http://some.com/logo"
+        }
+    }
+}}
+--
 <br>
-{{fullname}}<br>
+<br>
+<table styles="padding: 0">
+    <tr>
+        {{#profileimageurl}}
+        <td style="vertical-align: top;">
+            <img src="{{profileimageurl}}">&nbsp;
+        </td>
+        {{/profileimageurl}}
+        <td style="vertical-align: top;">
+            {{fullname}}<br>
 
-{{#department}}
-    {{department}}<br>
-{{/department}}
+            {{#department}}
+            {{department}}<br>
+            {{/department}}
 
-{{#institution}}
-    <b>{{institution}}</b><br>
-{{/institution}}
+            {{#institution}}
+            <b>{{institution}}</b><br>
+            {{/institution}}
 
-{{#city}}{{city}}, {{/city}}{{countryname}}<br>
+            {{#city}}{{city}}, {{/city}}{{countryname}}<br>
 
-{{#phone2}}
-    Mobile: {{phone2}}<br>
-{{/phone2}}
-
-{{#profileimageurlsmall}}
-    <img src="{{profileimageurlsmall}}"><br>
-{{/profileimageurlsmall}}
+            {{#phone2}}
+            Mobile: {{phone2}}<br>
+            {{/phone2}}
+        </td>
+    </tr>
+</table>
 
 {{#site.logocompact}}
-    <img src="{{site.logocompact}}" alt="{{fullname}}" width="140">
+<img src="{{site.logocompact}}" title="{{site.fullname}}" style="max-width: 100%">
 {{/site.logocompact}}
-
-<p><small>CONFIDENTIALITY NOTICE: This email is intended for the named recipients only.
+<br><hr><br>
+<p style="color: #777"><small>CONFIDENTIALITY NOTICE:<br> This email is intended for the named recipients only.
 It may contain privileged, confidential or copyright information. </small></p>
 
