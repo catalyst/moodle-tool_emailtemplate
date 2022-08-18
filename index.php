@@ -27,16 +27,20 @@ require_once(dirname(__FILE__) . '/../../../config.php');
 
 require_login();
 
+$userid = optional_param('userid', $USER->id, PARAM_INT);
+
 $pluginname = get_string('pluginname', 'tool_emailtemplate');
+
+$user = \core_user::get_user($userid, '*', MUST_EXIST);
 
 $url = new moodle_url('/admin/tool/emailtemplate/index.php');
 $context = context_system::instance();
-$context = context_user::instance($USER->id);
+$context = context_user::instance($user->id);
 $PAGE->set_context($context);
 $PAGE->set_pagelayout('standard');
 $PAGE->set_url($url);
-$PAGE->navigation->extend_for_user($USER);
-$PAGE->navbar->add(get_string('profile'), new moodle_url('/user/profile.php', array('id' => $USER->id)));
+$PAGE->navigation->extend_for_user($user);
+$PAGE->navbar->add(get_string('profile'), new moodle_url('/user/profile.php', array('id' => $user->id)));
 $PAGE->navbar->add($pluginname);
 
 // Check for caps.
@@ -47,12 +51,12 @@ echo $OUTPUT->heading($pluginname);
 $config = get_config('tool_emailtemplate');
 $template = $config->template;
 
-$data = user_get_user_details($USER);
+$data = user_get_user_details($user);
 
 unset($data['preferences']);
 
 // Set some convenient values.
-$data['fullname'] = fullname($USER);
+$data['fullname'] = fullname($user);
 $data['countryname'] = get_string($data['country'], 'countries');
 $data['site'] = [
     'logocompact' => $OUTPUT->get_compact_logo_url()->out(),
@@ -69,7 +73,7 @@ $rows = substr_count($html, "\n") + 2;
 
 echo $OUTPUT->render_from_template('tool_emailtemplate/compose', [
     'footer' => $html,
-    'from' => fullname($USER) . ' <' .$USER->email . '>',
+    'from' => fullname($user) . ' <' .$user->email . '>',
 ]);
 
 echo $OUTPUT->notification(get_string('usage', 'tool_emailtemplate'), 'info');
