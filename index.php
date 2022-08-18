@@ -90,10 +90,6 @@ echo $OUTPUT->render_from_template('tool_emailtemplate/compose', [
     'from' => fullname($user) . ' <' .$user->email . '>',
 ]);
 
-// echo '<pre>';
-// var_dump($data);
-// echo '</pre>';
-
 echo $OUTPUT->notification(get_string('usage', 'tool_emailtemplate'), 'info');
 
 echo html_writer::tag('textarea', $html, ['rows' => $rows, 'style' => 'width: 100%; font-family:monospace; font-size: 10px']);
