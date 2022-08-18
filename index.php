@@ -51,6 +51,7 @@ echo $OUTPUT->heading($pluginname);
 $config = get_config('tool_emailtemplate');
 $template = $config->template;
 
+profile_load_data($user);
 $data = user_get_user_details($user);
 
 unset($data['preferences']);
@@ -65,6 +66,19 @@ $data['site'] = [
     'wwwroot'   => $CFG->wwwroot,
 ];
 
+// Set a more convenient field but only if the profile image is set.
+if (strpos($data['profileimageurl'], '/theme/') === false) {
+    $data['avatar'] = $data['profileimageurl'];
+}
+
+// Make custom fields easier to reference.
+if (isset($data['customfields']) ) {
+    foreach ($data['customfields'] as $key => $value) {
+        $data['custom_' . $value['shortname']] = $value['value'];
+    }
+}
+unset($data['customfields']);
+
 $html = $OUTPUT->render_from_template('tool_emailtemplate/email', $data);
 
 // Clean up blank lines.
@@ -75,6 +89,10 @@ echo $OUTPUT->render_from_template('tool_emailtemplate/compose', [
     'footer' => $html,
     'from' => fullname($user) . ' <' .$user->email . '>',
 ]);
+
+// echo '<pre>';
+// var_dump($data);
+// echo '</pre>';
 
 echo $OUTPUT->notification(get_string('usage', 'tool_emailtemplate'), 'info');
 
