@@ -79,20 +79,26 @@ if (isset($data['customfields']) ) {
 }
 unset($data['customfields']);
 
-$html = $OUTPUT->render_from_template('tool_emailtemplate/email', $data);
+$mustache = new \core\output\mustache_engine([
+    'escape' => 's',
+    'pragmas' => [Mustache_Engine::PRAGMA_BLOCKS],
+]);
+
+$footer = $mustache->render($config->template, $data);
 
 // Clean up blank lines.
-$html = preg_replace('/\s*($|\n)/', '\1', $html);
-$rows = substr_count($html, "\n") + 2;
+$footer = preg_replace('/\s*($|\n)/', '\1', $footer);
+$footer = preg_replace('/  /', ' ', $footer);
+$rows = substr_count($footer, "\n") + 2;
 
 echo $OUTPUT->render_from_template('tool_emailtemplate/compose', [
-    'footer' => $html,
+    'footer' => $footer,
     'from' => fullname($user) . ' <' .$user->email . '>',
 ]);
 
 echo $OUTPUT->notification(get_string('usage', 'tool_emailtemplate'), 'info');
 
-echo html_writer::tag('textarea', $html, ['rows' => $rows, 'style' => 'width: 100%; font-family:monospace; font-size: 10px']);
+echo html_writer::tag('textarea', $footer, ['rows' => $rows, 'style' => 'width: 100%; font-family:monospace; font-size: 10px']);
 
 echo $OUTPUT->footer();
 
