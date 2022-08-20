@@ -32,11 +32,14 @@ if ($hassiteconfig) {
         $ADMIN->add('tools', $settings);
 
         // TODO turn the mustache template in code into config here.
-        $settings->add(new admin_setting_configtextarea(
+        $settings->add(new admin_setting_confightmleditor(
             'tool_emailtemplate/template',
             get_string('configtemplate', 'tool_emailtemplate'),
             get_string('configtemplate_help', 'tool_emailtemplate'),
-            ''
+            '',
+            PARAM_RAW,
+            60,
+            30
         ));
 
         $settings = null;
