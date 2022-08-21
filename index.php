@@ -48,57 +48,17 @@ require_capability('tool/emailtemplate:view', context_system::instance());
 echo $OUTPUT->header();
 echo $OUTPUT->heading($pluginname);
 
-$config = get_config('tool_emailtemplate');
-$template = $config->template;
-
-profile_load_data($user);
-$data = user_get_user_details($user);
-
-unset($data['preferences']);
-
-// Set some convenient values.
-$data['fullname'] = fullname($user);
-$data['countryname'] = get_string($data['country'], 'countries');
-$data['site'] = [
-    'logocompact' => $OUTPUT->get_compact_logo_url()->out(),
-    'fullname'  => $SITE->fullname,
-    'shortname' => $SITE->shortname,
-    'wwwroot'   => $CFG->wwwroot,
-];
-
-// Set a more convenient field but only if the profile image is set.
-if (strpos($data['profileimageurl'], '/theme/') === false) {
-    $data['avatar'] = $data['profileimageurl'];
-}
-
-// Make custom fields easier to reference.
-if (isset($data['customfields']) ) {
-    foreach ($data['customfields'] as $key => $value) {
-        $data['custom_' . $value['shortname']] = $value['value'];
-    }
-}
-unset($data['customfields']);
-
-$mustache = new \core\output\mustache_engine([
-    'escape' => 's',
-    'pragmas' => [Mustache_Engine::PRAGMA_BLOCKS],
-]);
-
-$footer = $mustache->render($config->template, $data);
-
-// Clean up blank lines.
-$footer = preg_replace('/\s*($|\n)/', '\1', $footer);
-$footer = preg_replace('/  /', ' ', $footer);
-$rows = substr_count($footer, "\n") + 2;
+$footer = new tool_emailtemplate\footer($user);
+$html = $footer->get_html();
 
 echo $OUTPUT->render_from_template('tool_emailtemplate/compose', [
-    'footer' => $footer,
+    'footer' => $html,
     'from' => fullname($user) . ' <' .$user->email . '>',
 ]);
-
+$rows = substr_count($html, "\n") + 2;
 echo $OUTPUT->notification(get_string('usage', 'tool_emailtemplate'), 'info');
 
-echo html_writer::tag('textarea', $footer, ['rows' => $rows, 'style' => 'width: 100%; font-family:monospace; font-size: 10px']);
+echo html_writer::tag('textarea', $html, ['rows' => $rows, 'style' => 'width: 100%; font-family:monospace; font-size: 10px']);
 
 echo $OUTPUT->footer();
 
