@@ -31,8 +31,9 @@ if ($hassiteconfig) {
         $settings = new admin_settingpage('manageemailtemplate', new lang_string('pluginfile', 'tool_emailtemplate'));
         $ADMIN->add('tools', $settings);
 
-        // TODO turn the mustache template in code into config here.
-        $settings->add(new admin_setting_confightmleditor(
+        // This needs to be a configtextarea and not a confightmleditor because
+        // atto & html tidy will mangle the mustache tags.
+        $settings->add(new admin_setting_configtextarea(
             'tool_emailtemplate/template',
             get_string('configtemplate', 'tool_emailtemplate'),
             get_string('configtemplate_help', 'tool_emailtemplate'),
@@ -40,6 +41,15 @@ if ($hassiteconfig) {
             PARAM_RAW,
             60,
             30
+        ));
+
+        $settings->add(new admin_setting_configstoredfile(
+            'tool_emailtemplate/images',
+            get_string('images', 'tool_emailtemplate'),
+            get_string('imagesdesc', 'tool_emailtemplate'),
+            'images',
+            0,
+            ['maxfiles' => 8, 'accepted_types' => ['web_image']]
         ));
 
         $settings = null;

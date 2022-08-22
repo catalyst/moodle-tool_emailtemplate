@@ -42,3 +42,36 @@ function tool_emailtemplate_myprofile_navigation(core_user\output\myprofile\tree
     }
 }
 
+/**
+ * Serves email image
+ *
+ * @param stdClass $course
+ * @param stdClass $cm
+ * @param context $context
+ * @param string $filearea
+ * @param array $args
+ * @param bool $forcedownload
+ * @return bool|null false if file not found, does not return anything if found - just send the file
+ */
+function tool_emailtemplate_pluginfile($course, $cm, $context, $filearea, $args, $forcedownload) {
+    global $CFG;
+
+    require_once($CFG->libdir . '/filelib.php');
+
+    // Email images must be public so no login of capability checks.
+
+    if ($filearea === 'images') {
+
+        $fullpath = '/' . $context->id . '/tool_emailtemplate/images/0/' . $args[1];
+
+        $fs = get_file_storage();
+        if (!$file = $fs->get_file_by_hash(sha1($fullpath)) || $file->is_directory()) {
+            return false;
+        }
+
+        // Cache them for 1 day.
+        send_stored_file($file, DAYSECS, 0, false, [
+            'cacheability' => 'public',
+        ]);
+    }
+}
