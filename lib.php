@@ -58,18 +58,21 @@ function tool_emailtemplate_pluginfile($course, $cm, $context, $filearea, $args,
 
     require_once($CFG->libdir . '/filelib.php');
 
-    // Email images must be public so no login of capability checks.
-
+    // Email images must be public so no login or capability checks.
     if ($filearea === 'images') {
 
         $fullpath = '/' . $context->id . '/tool_emailtemplate/images/0/' . $args[1];
 
         $fs = get_file_storage();
-        if (!$file = $fs->get_file_by_hash(sha1($fullpath)) || $file->is_directory()) {
+        if (!$file = $fs->get_file_by_hash(sha1($fullpath))) {
+            return false;
+        }
+        if ($file->is_directory()) {
             return false;
         }
 
-        // Cache them for 1 day.
+        // Cache them for 1 day. Most email clients will also proxy and cache
+        // the images for a day or so as well.
         send_stored_file($file, DAYSECS, 0, false, [
             'cacheability' => 'public',
         ]);
