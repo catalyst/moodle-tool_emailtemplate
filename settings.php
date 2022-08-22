@@ -43,6 +43,15 @@ if ($hassiteconfig) {
             30
         ));
 
+        $settings->add(new admin_setting_configstoredfile(
+            'tool_emailtemplate/images',
+            get_string('images', 'tool_emailtemplate'),
+            get_string('imagesdesc', 'tool_emailtemplate'),
+            'images',
+            0,
+            ['maxfiles' => 8, 'accepted_types' => ['web_image']]
+        ));
+
         $settings = null;
     }
 }

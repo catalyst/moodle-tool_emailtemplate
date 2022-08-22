@@ -78,6 +78,23 @@ class footer {
             }
         }
         unset($data['customfields']);
+
+        // Load all images into template data.
+        $fs = get_file_storage();
+        $contextid = \context_system::instance()->id;
+        $files = $fs->get_area_files($contextid, 'tool_emailtemplate', 'images');
+
+        $data['images'] = [];
+        foreach ($files as $file) {
+            $filename = $file->get_filename();
+            $shortfilename = pathinfo($filename, PATHINFO_FILENAME);
+            if ($filename == '.') {
+                continue;
+            }
+            $url = \moodle_url::make_pluginfile_url($contextid, 'tool_emailtemplate', 'images', $user->id, '/', $filename);
+            $data['images'][$shortfilename] = $url->out();
+        }
+
         return $data;
     }
 
