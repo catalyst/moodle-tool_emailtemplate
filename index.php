@@ -60,7 +60,19 @@ echo $OUTPUT->render_from_template('tool_emailtemplate/compose', [
 $rows = substr_count($html, "\n") + 2;
 echo $OUTPUT->notification(get_string('usage', 'tool_emailtemplate'), 'info');
 
-echo html_writer::tag('textarea', $html, ['rows' => $rows, 'style' => 'width: 100%; font-family:monospace; font-size: 10px']);
+echo html_writer::tag('button',
+    $OUTPUT->pix_icon('t/copy', '') . ' ' . get_string('copytoclipboard', 'tool_emailtemplate'),
+    ['id' => 'copy', 'class' => 'btn btn-primary']);
+echo html_writer::tag('textarea', $html, ['id' => 'email-template', 'rows' => $rows, 'style' => 'width: 100%; font-family:monospace; font-size: 10px']);
+
+echo <<<EOF
+<script>
+document.getElementById('copy').addEventListener('click', function(e) {
+    document.getElementById('email-template').select();
+    document.execCommand('copy');
+});
+</script>
+EOF;
 
 echo $OUTPUT->footer();
 
