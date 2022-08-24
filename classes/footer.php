@@ -61,7 +61,7 @@ class footer {
         if (isset($data['country'])) {
             $data['countryname'] = get_string($data['country'], 'countries');
         }
-        // $data['countryname'] = get_string($data['country'], 'countries');
+
         $data['site'] = [
             'fullname'  => $SITE->fullname,
             'shortname' => $SITE->shortname,
