@@ -106,7 +106,7 @@ class footer {
      * @return \Mustache_Engine
      */
     private function get_mustache() {
-        $mustache = new \core\output\mustache_engine([
+        $mustache = new \Mustache_Engine([
             'escape' => 's',
             'pragmas' => [\Mustache_Engine::PRAGMA_BLOCKS],
         ]);
