@@ -1,3 +1,6 @@
+
+[![ci](https://github.com/catalyst/moodle-tool_emailtemplate/workflows/ci/badge.svg)](https://github.com/catalyst/moodle-tool_emailtemplate/actions?query=workflow%3Aci)
+
 # A html email footer generating plugin
 
 ## What is this plugin?
