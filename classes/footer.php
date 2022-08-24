@@ -58,7 +58,10 @@ class footer {
 
         // Set some convenient values.
         $data['fullname'] = fullname($user);
-        $data['countryname'] = get_string($data['country'], 'countries');
+        if (isset($data['country'])) {
+            $data['countryname'] = get_string($data['country'], 'countries');
+        }
+        // $data['countryname'] = get_string($data['country'], 'countries');
         $data['site'] = [
             'fullname'  => $SITE->fullname,
             'shortname' => $SITE->shortname,
