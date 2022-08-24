@@ -36,7 +36,7 @@
 function tool_emailtemplate_myprofile_navigation(core_user\output\myprofile\tree $tree, $user, $iscurrentuser, $course) {
     if (has_capability('tool/emailtemplate:view', context_system::instance())) {
         $url = new moodle_url('/admin/tool/emailtemplate/index.php', ['userid' => $user->id]);
-        $node = new core_user\output\myprofile\node('miscellaneous', 'emailtemplate',
+        $node = new core_user\output\myprofile\node('contact', 'emailtemplate',
             get_string('pluginname', 'tool_emailtemplate'), null, $url);
         $tree->add_node($node);
     }
