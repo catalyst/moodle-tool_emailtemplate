@@ -39,6 +39,8 @@ $context = context_user::instance($user->id);
 $PAGE->set_context($context);
 $PAGE->set_pagelayout('standard');
 $PAGE->set_url($url);
+$PAGE->set_heading($pluginname);
+$PAGE->set_title($pluginname);
 $PAGE->navigation->extend_for_user($user);
 $PAGE->navbar->add(get_string('profile'), new moodle_url('/user/profile.php', array('id' => $user->id)));
 $PAGE->navbar->add($pluginname);
