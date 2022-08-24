@@ -26,32 +26,30 @@
 defined('MOODLE_INTERNAL') || die();
 
 if ($hassiteconfig) {
-    if ($ADMIN->fulltree) {
 
-        $settings = new admin_settingpage('manageemailtemplate', new lang_string('pluginfile', 'tool_emailtemplate'));
-        $ADMIN->add('tools', $settings);
+    $settings = new admin_settingpage('manageemailtemplate', new lang_string('pluginfile', 'tool_emailtemplate'));
+    $ADMIN->add('tools', $settings);
 
-        // This needs to be a configtextarea and not a confightmleditor because
-        // atto & html tidy will mangle the mustache tags.
-        $settings->add(new admin_setting_configtextarea(
-            'tool_emailtemplate/template',
-            get_string('configtemplate', 'tool_emailtemplate'),
-            get_string('configtemplate_help', 'tool_emailtemplate'),
-            '',
-            PARAM_RAW,
-            60,
-            30
-        ));
+    // This needs to be a configtextarea and not a confightmleditor because
+    // atto & html tidy will mangle the mustache tags.
+    $settings->add(new admin_setting_configtextarea(
+        'tool_emailtemplate/template',
+        get_string('configtemplate', 'tool_emailtemplate'),
+        get_string('configtemplate_help', 'tool_emailtemplate'),
+        '',
+        PARAM_RAW,
+        60,
+        30
+    ));
 
-        $settings->add(new admin_setting_configstoredfile(
-            'tool_emailtemplate/images',
-            get_string('images', 'tool_emailtemplate'),
-            get_string('imagesdesc', 'tool_emailtemplate'),
-            'images',
-            0,
-            ['maxfiles' => 8, 'accepted_types' => ['web_image']]
-        ));
+    $settings->add(new admin_setting_configstoredfile(
+        'tool_emailtemplate/images',
+        get_string('images', 'tool_emailtemplate'),
+        get_string('imagesdesc', 'tool_emailtemplate'),
+        'images',
+        0,
+        ['maxfiles' => 8, 'accepted_types' => ['web_image']]
+    ));
 
-        $settings = null;
-    }
+    $settings = null;
 }
