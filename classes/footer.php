@@ -60,11 +60,13 @@ class footer {
         $data['fullname'] = fullname($user);
         $data['countryname'] = get_string($data['country'], 'countries');
         $data['site'] = [
-            'logocompact' => $OUTPUT->get_compact_logo_url()->out(),
             'fullname'  => $SITE->fullname,
             'shortname' => $SITE->shortname,
             'wwwroot'   => $CFG->wwwroot,
         ];
+        if (isset($OUTPUT->get_compact_logo_url)) {
+            $data['logocompact'] = $OUTPUT->get_compact_logo_url()->out();
+        }
 
         // Set a more convenient field but only if the profile image is set.
         if (strpos($data['profileimageurl'], '/theme/') === false) {
