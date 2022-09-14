@@ -50,6 +50,8 @@ class footer {
     public function get_data(): array {
         global $CFG, $OUTPUT, $SITE;
 
+        require_once($CFG->dirroot . '/user/lib.php');
+
         $user = $this->user;
         profile_load_data($user);
         $data = user_get_user_details($user);
