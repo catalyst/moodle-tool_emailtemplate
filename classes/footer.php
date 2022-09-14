@@ -47,7 +47,7 @@ class footer {
      * Get the data to be used as the mustache context
      * @return array of context data
      */
-    private function get_data(): array {
+    public function get_data(): array {
         global $CFG, $OUTPUT, $SITE;
 
         $user = $this->user;
@@ -73,7 +73,15 @@ class footer {
 
         // Set a more convenient field but only if the profile image is set.
         if (strpos($data['profileimageurl'], '/theme/') === false) {
-            $data['avatar'] = $data['profileimageurl'];
+
+            // Always set gravatar.
+            $data['gravatar'] = $data['profileimageurl'];
+
+            // Only set avatar if url is local.
+            if (strpos($data['profileimageurl'], $CFG->wwwroot) !== false) {
+                $data['avatar'] = $data['profileimageurl'];
+            }
+
         }
 
         // Make custom fields easier to reference.
