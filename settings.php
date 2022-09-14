@@ -32,10 +32,14 @@ if ($hassiteconfig) {
 
     // This needs to be a configtextarea and not a confightmleditor because
     // atto & html tidy will mangle the mustache tags.
+
+    $data = (new \tool_emailtemplate\footer($USER))->get_data();
+    $data = '<pre>' . json_encode($data, JSON_PRETTY_PRINT) . '</pre>';
+
     $settings->add(new admin_setting_configtextarea(
         'tool_emailtemplate/template',
         get_string('configtemplate', 'tool_emailtemplate'),
-        get_string('configtemplate_help', 'tool_emailtemplate'),
+        get_string('configtemplate_help', 'tool_emailtemplate') . $data,
         '',
         PARAM_RAW,
         60,
