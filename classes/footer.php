@@ -93,6 +93,14 @@ class footer {
             }
         }
         unset($data['customfields']);
+        unset($data['enrolledcourses']);
+        unset($data['mailformat']);
+        unset($data['lastcourseaccess']);
+        unset($data['suspended']);
+        unset($data['firstaccess']);
+        unset($data['lastaccess']);
+        unset($data['auth']);
+        unset($data['confirmed']);
 
         // Load all images into template data.
         $fs = get_file_storage();
