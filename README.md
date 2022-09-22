@@ -4,6 +4,7 @@
 * [What is this?](#what-is-this)
 * [Branches](#branches)
 * [Configuration](#configuration)
+* [Using the email template](#using-the-email-template)
 * [Support](#support)
 * [Credits](#credits)
 
@@ -40,7 +41,7 @@ The easiest way to get started as an administrator is to:
 5) Test your email in real email clients and rinse and repeat as needed
 
 
-## View the footer html as a normal user
+## Using the email template
 
 Each user will get a new link on their profile to the new page:
 
