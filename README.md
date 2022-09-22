@@ -13,7 +13,22 @@ include custom profile fields like social links.
 
 The html is generated using a mustache template which can be customized.
 
-## View the footer html
+## Configuring the plugin
+
+The easiest way to get started as an administrator is to:
+
+1) populate your own user profile with any data that you might want exposed
+   in your email template
+2) Visit the admin settings /admin/settings.php?section=manageemailtemplate and you
+   will see a json data structure of all the data available to be used in your mustache template
+3) Fill in the email mustache template and previewing it on your own profile page (see below). 
+   For mustache syntax see: http://mustache.github.io/mustache.5.html
+4) For best results consult with one of the many HTML email resources online around the best
+   practice for authoring html in emails which can be very unintuitive
+5) Test your email in real email clients and rinse and repeat as needed
+
+
+## View the footer html as a normal user
 
 Each user will get a new link on their profile to the new page:
 
