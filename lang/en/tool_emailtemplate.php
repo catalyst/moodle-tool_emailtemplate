@@ -34,3 +34,4 @@ $string['copytoclipboard'] = 'Copy to clipboard';
 $string['images'] = 'Images';
 $string['imagesdesc'] = 'These images can be used in the email template. If the image filename is example.jpg then in the template use {{images.example}} without the extension. You can replace images in place and have the footers dynamcially replaced, but do NOT swap it\'s extension. If you have ever used an image then you should keep it indefinetly to no break old footers still being seen.';
 $string['usage'] = 'To use this template first make sure that all of your user profile fields are filled in that this template might use such as mobile phone and social links. Then reload this page to see the latest version, then cut and paste the html below into your email client.';
+$string['privacy:metadata'] = 'The Email footer template plugin does not store any personal data.';
