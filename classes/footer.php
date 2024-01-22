@@ -114,7 +114,7 @@ class footer {
             if ($filename == '.') {
                 continue;
             }
-            $url = \moodle_url::make_pluginfile_url($contextid, 'tool_emailtemplate', 'images', $user->id, '/', $filename);
+            $url = \moodle_url::make_pluginfile_url($contextid, 'tool_emailtemplate', 'images', $user->username, '/', $filename);
             $data['images'][$shortfilename] = $url->out();
         }
 
