@@ -48,7 +48,7 @@ class footer {
      * @return array of context data
      */
     public function get_data(): array {
-        global $CFG, $OUTPUT, $SITE;
+        global $CFG, $DB, $OUTPUT, $SITE;
 
         require_once($CFG->dirroot . '/user/lib.php');
 
@@ -108,13 +108,22 @@ class footer {
         $files = $fs->get_area_files($contextid, 'tool_emailtemplate', 'images');
 
         $data['images'] = [];
+
+        $sql = "SELECT MAX(timemodified) AS timemodified
+                  FROM {config_log}
+                 WHERE plugin = 'tool_emailtemplate' AND name = 'template'";
+        $record = $DB->get_record_sql($sql);
+        $lastupdated = $record->timemodified ?? time();
+
         foreach ($files as $file) {
             $filename = $file->get_filename();
             $shortfilename = pathinfo($filename, PATHINFO_FILENAME);
             if ($filename == '.') {
                 continue;
             }
-            $url = \moodle_url::make_pluginfile_url($contextid, 'tool_emailtemplate', 'images', $user->username, '/', $filename);
+
+            $info = $user->username . '-' . userdate($lastupdated, get_string('dateformat', 'tool_emailtemplate'));
+            $url = \moodle_url::make_pluginfile_url($contextid, 'tool_emailtemplate', 'images', $info, '/', $filename);
             $data['images'][$shortfilename] = $url->out();
         }
 

@@ -23,6 +23,8 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+use tool_emailtemplate\admin_setting_customprofilefield;
+
 defined('MOODLE_INTERNAL') || die();
 
 if ($hassiteconfig) {
@@ -53,6 +55,13 @@ if ($hassiteconfig) {
         'images',
         0,
         ['maxfiles' => 8, 'accepted_types' => ['web_image']]
+    ));
+
+    $settings->add(new admin_setting_customprofilefield(
+        'tool_emailtemplate/lastupdated',
+        get_string('lastupdated', 'tool_emailtemplate'),
+        get_string('lastupdateddesc', 'tool_emailtemplate'),
+        ''
     ));
 
     $settings = null;
