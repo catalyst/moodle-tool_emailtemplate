@@ -72,10 +72,56 @@ function tool_emailtemplate_pluginfile($course, $cm, $context, $filearea, $args,
             return false;
         }
 
+        tool_emailtemplate_update_timestamp($args[0]);
+
         // Cache them for 1 day. Most email clients will also proxy and cache
         // the images for a day or so as well.
         send_stored_file($file, DAYSECS, 0, false, [
             'cacheability' => 'public',
         ]);
+    }
+}
+
+/**
+ * Stores the date when the footer image was last updated into a custom field.
+ *
+ * @param string $info
+ * @return void
+ */
+function tool_emailtemplate_update_timestamp($info) {
+    GLOBAL $CFG, $DB;
+
+    require_once($CFG->dirroot . '/user/profile/lib.php');
+
+    $customfield = get_config('tool_emailtemplate', 'lastupdated');
+    $datelen = strlen(userdate(time(), get_string('dateformat', 'tool_emailtemplate')));
+    if (empty($customfield) || strlen($info) < ($datelen + 1) || !str_contains($info, '-')) {
+        return;
+    }
+
+    $username = substr($info, 0, -$datelen - 1);
+    $date = substr($info, -$datelen);
+
+    // Grab the user from the username. Doesn't handle cases where it's not unique.
+    $user = $DB->get_record('user', array('username' => $username));
+    if (empty($user)) {
+        return;
+    }
+
+    profile_load_data($user);
+
+    $profilefieldname = 'profile_field_' . $customfield;
+    $currenttimestamp = $user->$profilefieldname;
+
+    try {
+        $date = new \DateTime($date);
+        $timestamp = $date->getTimestamp();
+        // Only save if later than the most recent saved timestamp.
+        if (isset($currenttimestamp) && $timestamp > $currenttimestamp) {
+            profile_save_custom_fields($user->id, [$customfield => $timestamp]);
+        }
+    } catch (\Exception $e) {
+        // Invalid date formatting, don't save the custom field.
+        debugging($e->getMessage());
     }
 }
