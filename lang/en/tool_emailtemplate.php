@@ -40,3 +40,4 @@ $string['lastupdated'] = 'Last Updated';
 $string['lastupdateddesc'] = 'Stores a timestamp of the most recent time a footer with images was updated into a custom profile field.';
 $string['customprofilefield:default'] = 'None';
 $string['customprofilefield:displayname'] = '{$a->name} ({$a->shortname})';
+$string['emailtemplate:view'] = 'View Email footer template';
