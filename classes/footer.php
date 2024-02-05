@@ -51,6 +51,7 @@ class footer {
         global $CFG, $DB, $OUTPUT, $SITE;
 
         require_once($CFG->dirroot . '/user/lib.php');
+        require_once($CFG->dirroot . '/user/profile/lib.php');
 
         $user = $this->user;
         profile_load_data($user);
