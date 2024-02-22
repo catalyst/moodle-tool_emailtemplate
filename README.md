@@ -5,6 +5,7 @@
 * [Branches](#branches)
 * [Configuration](#configuration)
 * [Using the email template](#using-the-email-template)
+* [Image support](#image-support)
 * [Support](#support)
 * [Credits](#credits)
 
