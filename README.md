@@ -51,6 +51,23 @@ Each user then gets shown a preview of what their email footer will
 look like and the chunk of HTML they then need to configure in their
 various email clients.
 
+## Image support
+
+Images such as a brand can be uploaded and references from the template. These images
+will be served from the Moodle domain. The images can also be replaced at any time but
+care needs to be take as they will be replaced not just in new emails but in all historical
+emails as well. This capability is very useful for things like an image which can be
+swapped out centrally that all users get without extra effort.
+
+The link the image would go to needs to be hard coded into the template but this plugin pairs
+well with tool_redirects for creating a generic url which can be redirected to somewhere else.
+For instance this month you could have an image for a conference and the redirect takes you
+to the conference page, and then next month the image is for a course offering and takes you
+to the enrolment page.
+
+https://github.com/catalyst/moodle-tool_redirects
+
+
 ## Support
 
 If you have issues please log them in
