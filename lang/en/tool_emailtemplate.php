@@ -25,19 +25,18 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-$string['pluginname'] = 'Email footer template';
-$string['pluginfile'] = 'Email footer template';
-
 $string['configtemplate'] = 'Templates';
 $string['configtemplate_help'] = 'A mustache template for the email template';
 $string['copytoclipboard'] = 'Copy to clipboard';
-$string['images'] = 'Images';
-$string['imagesdesc'] = 'These images can be used in the email template. If the image filename is example.jpg then in the template use {{images.example}} without the extension. You can replace images in place and have the footers dynamcially replaced, but do NOT swap it\'s extension. If you have ever used an image then you should keep it indefinetly to no break old footers still being seen.';
-$string['usage'] = 'To use this template first make sure that all of your user profile fields are filled in that this template might use such as mobile phone and social links. Then reload this page to see the latest version, then cut and paste the html below into your email client.';
-$string['privacy:metadata'] = 'The Email footer template plugin does not store any personal data.';
-$string['dateformat'] = '%Y-%m-%d';
-$string['lastupdated'] = 'Last Updated';
-$string['lastupdateddesc'] = 'Stores a timestamp of the most recent time a footer with images was updated into a custom profile field.';
 $string['customprofilefield:default'] = 'None';
 $string['customprofilefield:displayname'] = '{$a->name} ({$a->shortname})';
+$string['dateformat'] = '%Y-%m-%d';
 $string['emailtemplate:view'] = 'View Email footer template';
+$string['images'] = 'Images';
+$string['imagesdesc'] = 'These images can be used in the email template. If the image filename is example.jpg then in the template use {{images.example}} without the extension. You can replace images in place and have the footers dynamcially replaced, but do NOT swap it\'s extension. If you have ever used an image then you should keep it indefinetly to no break old footers still being seen.';
+$string['lastupdated'] = 'Last Updated';
+$string['lastupdateddesc'] = 'Stores a timestamp of the most recent time a footer with images was updated into a custom profile field.';
+$string['pluginfile'] = 'Email footer template';
+$string['pluginname'] = 'Email footer template';
+$string['privacy:metadata'] = 'The Email footer template plugin does not store any personal data.';
+$string['usage'] = 'To use this template first make sure that all of your user profile fields are filled in that this template might use such as mobile phone and social links. Then reload this page to see the latest version, then cut and paste the html below into your email client.';

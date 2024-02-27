@@ -64,7 +64,7 @@ class footer {
 
         // Set some convenient values.
         $data['fullname'] = fullname($user);
-        if (isset($data['country'])) {
+        if (!empty($data['country'])) {
             $data['countryname'] = get_string($data['country'], 'countries');
         }
 
