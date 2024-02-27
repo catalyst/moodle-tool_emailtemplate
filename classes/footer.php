@@ -25,6 +25,8 @@
 
 namespace tool_emailtemplate;
 
+use core_user\external\user_summary_exporter;
+
 /**
  * A footer
  */
@@ -55,9 +57,10 @@ class footer {
 
         $user = $this->user;
         profile_load_data($user);
-        $data = user_get_user_details($user);
 
-        unset($data['preferences']);
+        $userexporter = new user_summary_exporter($user);
+        $profile = $userexporter->export($OUTPUT);
+        $data = array_merge((array)$profile, (array)$user);
 
         // Set some convenient values.
         $data['fullname'] = fullname($user);
@@ -93,15 +96,21 @@ class footer {
                 $data['custom_' . $value['shortname']] = $value['value'];
             }
         }
+        unset($data['auth']);
+        unset($data['access']);
+        unset($data['confirmed']);
         unset($data['customfields']);
+        unset($data['enrol']);
         unset($data['enrolledcourses']);
-        unset($data['mailformat']);
-        unset($data['lastcourseaccess']);
-        unset($data['suspended']);
         unset($data['firstaccess']);
         unset($data['lastaccess']);
-        unset($data['auth']);
-        unset($data['confirmed']);
+        unset($data['lastcourseaccess']);
+        unset($data['mailformat']);
+        unset($data['preference']);
+        unset($data['preferences']);
+        unset($data['suspended']);
+        unset($data['sesskey']);
+        unset($data['userselectors']);
 
         // Load all images into template data.
         $fs = get_file_storage();
@@ -127,6 +136,8 @@ class footer {
             $url = \moodle_url::make_pluginfile_url($contextid, 'tool_emailtemplate', 'images', $info, '/', $filename);
             $data['images'][$shortfilename] = $url->out();
         }
+
+        ksort($data);
 
         return $data;
     }
