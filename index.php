@@ -34,6 +34,9 @@ $pluginname = get_string('pluginname', 'tool_emailtemplate');
 $user = \core_user::get_user($userid, '*', MUST_EXIST);
 
 $url = new moodle_url('/admin/tool/emailtemplate/index.php');
+if (!empty($userid)) {
+    $url->param('userid', $userid);
+}
 $context = context_system::instance();
 $context = context_user::instance($user->id);
 $PAGE->set_context($context);
