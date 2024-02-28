@@ -25,8 +25,8 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->version = 2022091405;
-$plugin->release = 2022091405;
+$plugin->version = 2024022900;
+$plugin->release = 2024022900;
 $plugin->requires = 2017051500;    // Our lowest supported Moodle (3.3.0).
 $plugin->supported = [39, 401];    // Available as of Moodle 3.9.0 or later.
 $plugin->component = 'tool_emailtemplate';

@@ -132,7 +132,7 @@ class footer {
                 continue;
             }
 
-            $info = $user->username . '-' . userdate($lastupdated, get_string('dateformat', 'tool_emailtemplate'));
+            $info = $user->username . '-' . date('Y-m-d', $lastupdated);
             $url = \moodle_url::make_pluginfile_url($contextid, 'tool_emailtemplate', 'images', $info, '/', $filename);
             $data['images'][$shortfilename] = $url->out();
         }

@@ -57,11 +57,11 @@ if ($hassiteconfig) {
         ['maxfiles' => 8, 'accepted_types' => ['web_image']]
     ));
 
-    $settings->add(new admin_setting_customprofilefield(
-        'tool_emailtemplate/lastupdated',
-        get_string('lastupdated', 'tool_emailtemplate'),
-        get_string('lastupdateddesc', 'tool_emailtemplate'),
-        ''
+    $settings->add(new admin_setting_configcheckbox(
+        'tool_emailtemplate/tracking',
+        get_string('tracking', 'tool_emailtemplate'),
+        get_string('trackingdesc', 'tool_emailtemplate'),
+        0
     ));
 
     $settings = null;
