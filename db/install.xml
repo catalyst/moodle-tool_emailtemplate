@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<XMLDB PATH="admin/tool/emailtemplate/db" VERSION="2024022900" COMMENT="XMLDB file for Moodle tool/emailtemplate">
+    <TABLES>
+        <TABLE NAME="tool_emailtemplate_tracking" COMMENT="Footer tracking for emailtemplate tool">
+            <FIELDS>
+                <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
+                <FIELD NAME="userid" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false"/>
+                <FIELD NAME="version" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false"/>
+                <FIELD NAME="lastloaded" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false"/>
+            </FIELDS>
+            <KEYS>
+                <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+                <KEY NAME="userid" TYPE="foreign" FIELDS="userid" REFTABLE="user" REFFIELDS="id"/>
+                <KEY NAME="userid_unique" TYPE="unique" FIELDS="userid"/>
+            </KEYS>
+        </TABLE>
+    </TABLES>
+</XMLDB>

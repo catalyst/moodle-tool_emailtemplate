@@ -72,7 +72,10 @@ function tool_emailtemplate_pluginfile($course, $cm, $context, $filearea, $args,
             return false;
         }
 
-        tool_emailtemplate_update_timestamp($args[0]);
+        // Update tracking information if enabled and the file is viewed outside of Moodle.
+        if (!empty(get_config('tool_emailtemplate', 'tracking')) && !isloggedin()) {
+            tool_emailtemplate_update_tracking($args[0]);
+        }
 
         // Cache them for 1 day. Most email clients will also proxy and cache
         // the images for a day or so as well.
@@ -83,45 +86,67 @@ function tool_emailtemplate_pluginfile($course, $cm, $context, $filearea, $args,
 }
 
 /**
- * Stores the date when the footer image was last updated into a custom field.
+ * Stores tracking information about footer image version into the database.
  *
  * @param string $info
  * @return void
  */
-function tool_emailtemplate_update_timestamp($info) {
-    GLOBAL $CFG, $DB;
+function tool_emailtemplate_update_tracking($info) {
+    GLOBAL $DB;
 
-    require_once($CFG->dirroot . '/user/profile/lib.php');
-
-    $customfield = get_config('tool_emailtemplate', 'lastupdated');
-    $datelen = strlen(userdate(time(), get_string('dateformat', 'tool_emailtemplate')));
-    if (empty($customfield) || strlen($info) < ($datelen + 1) || !str_contains($info, '-')) {
+    // Confirm data is formatted correctly and contains the required info.
+    $date = date('Y-m-d');
+    $datelen = strlen($date);
+    if (strlen($info) < ($datelen + 1) || !str_contains($info, '-')) {
         return;
     }
 
-    $username = substr($info, 0, -$datelen - 1);
-    $date = substr($info, -$datelen);
-
     // Grab the user from the username. Doesn't handle cases where it's not unique.
+    $username = substr($info, 0, -$datelen - 1);
     $user = $DB->get_record('user', array('username' => $username));
     if (empty($user)) {
         return;
     }
 
-    profile_load_data($user);
+    // Verify that the remaining part of the string is a valid version id (date).
+    $version = strtotime(substr($info, -$datelen));
+    if (empty($version) || $version > time()) {
+        return;
+    }
 
-    $profilefieldname = 'profile_field_' . $customfield;
-    $currenttimestamp = $user->$profilefieldname;
+    // Use date timestamp rather than time so it's only updated once per day max.
+    $lastloaded = strtotime($date);
 
-    try {
-        $date = new \DateTime($date);
-        $timestamp = $date->getTimestamp();
-        // Only save if later than the most recent saved timestamp.
-        if (isset($currenttimestamp) && $timestamp > $currenttimestamp) {
-            profile_save_custom_fields($user->id, [$customfield => $timestamp]);
-        }
-    } catch (\Exception $e) {
-        // Invalid date formatting, don't save the custom field.
-        debugging($e->getMessage());
+    // Load previous record for user.
+    $tracking = $DB->get_record('tool_emailtemplate_tracking', ['userid' => $user->id]);
+
+    // If we have no tracking information, create new record.
+    if (empty($tracking)) {
+        $trackinginfo = [
+            'userid' => $user->id,
+            'version' => $version,
+            'lastloaded' => $lastloaded,
+        ];
+        $DB->insert_record('tool_emailtemplate_tracking', $trackinginfo);
+        return;
+    }
+
+    // Otherwise check if the existing record needs updating.
+    $update = false;
+
+    // Version info can come from outdated links, so only update when a higher version is detected.
+    if (isset($tracking->version) && $version > $tracking->version) {
+        $tracking->version = $version;
+        $update = true;
+    }
+
+    // Lastloaded is a date timestamp so only needs to be updated once per day.
+    if (isset($tracking->lastloaded) && $lastloaded > $tracking->lastloaded) {
+        $tracking->lastloaded = $lastloaded;
+        $update = true;
+    }
+
+    if ($update) {
+        $DB->update_record('tool_emailtemplate_tracking', $tracking);
     }
 }
