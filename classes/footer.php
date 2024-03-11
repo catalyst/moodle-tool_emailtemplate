@@ -112,6 +112,8 @@ class footer {
         unset($data['sesskey']);
         unset($data['userselectors']);
 
+        $data['global'] = $this->get_global_variables();
+
         // Load all images into template data.
         $fs = get_file_storage();
         $contextid = \context_system::instance()->id;
@@ -172,4 +174,24 @@ class footer {
         return $footer;
     }
 
+    /**
+     * Get the global variables formatted as key value pairs.
+     * @return array global variables
+     */
+    public function get_global_variables(): array {
+        $vars = [];
+
+        // Split into key value pairs.
+        $lines = preg_split("/(\r\n|\n|\r)/", get_config('tool_emailtemplate', 'global_vars'));
+        foreach ($lines as $line) {
+            // Ignore lines with a missing key or value.
+            if (strpos($line, ':') == false) {
+                continue;
+            }
+            list($key, $value) = array_map('trim', explode(":", $line, 2));
+            $vars[$key] = $value;
+        }
+
+        return $vars;
+    }
 }

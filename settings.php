@@ -23,8 +23,6 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-use tool_emailtemplate\admin_setting_customprofilefield;
-
 defined('MOODLE_INTERNAL') || die();
 
 if ($hassiteconfig) {
@@ -46,6 +44,14 @@ if ($hassiteconfig) {
         PARAM_RAW,
         60,
         30
+    ));
+
+    $settings->add(new admin_setting_configtextarea(
+        'tool_emailtemplate/global_vars',
+        get_string('global_vars', 'tool_emailtemplate'),
+        get_string('global_vars_desc', 'tool_emailtemplate'),
+        '',
+        PARAM_RAW
     ));
 
     $settings->add(new admin_setting_configstoredfile(
