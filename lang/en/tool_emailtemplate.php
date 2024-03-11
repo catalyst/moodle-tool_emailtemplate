@@ -31,6 +31,9 @@ $string['copytoclipboard'] = 'Copy to clipboard';
 $string['customprofilefield:default'] = 'None';
 $string['customprofilefield:displayname'] = '{$a->name} ({$a->shortname})';
 $string['emailtemplate:view'] = 'View Email footer template';
+$string['global_vars'] = 'Global variables';
+$string['global_vars_desc'] = "Global variables that can be accessed within the template as {{global.&lt;name&gt;}}.
+    Variables should be defined as 'name: value', with each variable being on a new line.";
 $string['images'] = 'Images';
 $string['imagesdesc'] = 'These images can be used in the email template. If the image filename is example.jpg then in the template use {{images.example}} without the extension. You can replace images in place and have the footers dynamcially replaced, but do NOT swap it\'s extension. If you have ever used an image then you should keep it indefinetly to no break old footers still being seen.';
 $string['pluginfile'] = 'Email footer template';
