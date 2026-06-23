@@ -77,17 +77,20 @@ class footer {
             $data['logocompact'] = $OUTPUT->get_compact_logo_url()->out();
         }
 
-        // Always set avatar to our public pluginfile endpoint. The handler resolves
+        // Set avatar placeholders at three sizes. The pluginfile handler resolves
         // the current image at serve time: local upload first, Gravatar fallback if enabled.
         $syscontextid = \context_system::instance()->id;
-        $data['avatar'] = \moodle_url::make_pluginfile_url(
-            $syscontextid,
-            'tool_emailtemplate',
-            'avatar',
-            $user->id,
-            '/',
-            'f1'
-        )->out(false);
+        $filenames = ['f2' => 'avatar_35', 'f1' => 'avatar_100', 'f3' => 'avatar_512'];
+        foreach ($filenames as $fname => $key) {
+            $data[$key] = \moodle_url::make_pluginfile_url(
+                $syscontextid,
+                'tool_emailtemplate',
+                'avatar',
+                $user->id,
+                '/',
+                $fname
+            )->out(false);
+        }
 
         unset($data['profileimageurl']);
         unset($data['profileimageurlsmall']);

@@ -87,6 +87,8 @@ function tool_emailtemplate_pluginfile($course, $cm, $context, $filearea, $args,
         // Public endpoint serving a user's profile avatar for use in email footers.
         // No login required - this is intentionally public and only exposes avatar images.
         // Resolved at serve time so changes to the user's profile picture are reflected.
+        \core\session\manager::write_close();
+
         $userid = (int) array_shift($args);
         $filename = array_shift($args) ?: 'f1';
 
@@ -111,24 +113,40 @@ function tool_emailtemplate_pluginfile($course, $cm, $context, $filearea, $args,
         if (!empty($CFG->enablegravatar)) {
             $user = $DB->get_record('user', ['id' => $userid], 'id, email', IGNORE_MISSING);
             if ($user && !empty($user->email)) {
+                $sizemap = ['f2' => 35, 'f1' => 100, 'f3' => 512];
+                $size = $sizemap[$filename];
+
                 $md5 = md5(strtolower(trim($user->email)));
-                $gravatardefault = !empty($CFG->gravatardefaulturl) ? $CFG->gravatardefaulturl : '404';
-                $gravatarurl = "https://www.gravatar.com/avatar/{$md5}?s=100&d=" . urlencode($gravatardefault);
+                $cachedir = $CFG->tempdir . '/tool_emailtemplate';
+                $cachefile = $cachedir . '/' . $md5 . '_' . $size;
 
-                $curl = new \curl();
-                $curl->setopt(['CURLOPT_FOLLOWLOCATION' => true]);
-                $imagedata = $curl->get($gravatarurl);
+                if (file_exists($cachefile) && filemtime($cachefile) > time() - DAYSECS) {
+                    $imagedata = file_get_contents($cachefile);
+                    $mimetype = mime_content_type($cachefile) ?: 'image/jpeg';
+                } else {
+                    $gravatardefault = !empty($CFG->gravatardefaulturl) ? $CFG->gravatardefaulturl : '404';
+                    $gravatarurl = "https://www.gravatar.com/avatar/{$md5}?s={$size}&d=" . urlencode($gravatardefault);
 
-                if ($imagedata && !$curl->get_errno()) {
+                    $curl = new \curl();
+                    $curl->setopt(['CURLOPT_FOLLOWLOCATION' => true]);
+                    $imagedata = $curl->get($gravatarurl);
+
+                    if (!$imagedata || $curl->get_errno()) {
+                        return false;
+                    }
+
                     $info = $curl->get_info();
                     $mimetype = explode(';', $info['content_type'] ?? 'image/jpeg')[0];
-                    \core\session\manager::write_close();
-                    header('Content-Type: ' . $mimetype);
-                    header('Cache-Control: public, max-age=' . DAYSECS);
-                    header('Content-Length: ' . strlen($imagedata));
-                    echo $imagedata;
-                    die;
+
+                    make_writable_directory($cachedir);
+                    file_put_contents($cachefile, $imagedata);
                 }
+
+                header('Content-Type: ' . $mimetype);
+                header('Cache-Control: public, max-age=' . DAYSECS);
+                header('Content-Length: ' . strlen($imagedata));
+                echo $imagedata;
+                die;
             }
         }
 
