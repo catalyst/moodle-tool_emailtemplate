@@ -77,18 +77,20 @@ class footer {
             $data['logocompact'] = $OUTPUT->get_compact_logo_url()->out();
         }
 
-        // Set a more convenient field but only if the profile image is set.
-        if (strpos($data['profileimageurl'], '/theme/') === false) {
+        // Always set avatar to our public pluginfile endpoint. The handler resolves
+        // the current image at serve time: local upload first, Gravatar fallback if enabled.
+        $syscontextid = \context_system::instance()->id;
+        $data['avatar'] = \moodle_url::make_pluginfile_url(
+            $syscontextid,
+            'tool_emailtemplate',
+            'avatar',
+            $user->id,
+            '/',
+            'f1'
+        )->out(false);
 
-            // Always set gravatar.
-            $data['gravatar'] = $data['profileimageurl'];
-
-            // Only set avatar if url is local.
-            if (strpos($data['profileimageurl'], $CFG->wwwroot) !== false) {
-                $data['avatar'] = $data['profileimageurl'];
-            }
-
-        }
+        unset($data['profileimageurl']);
+        unset($data['profileimageurlsmall']);
 
         // Make custom fields easier to reference.
         if (isset($data['customfields'])) {

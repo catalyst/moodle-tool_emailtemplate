@@ -55,7 +55,7 @@ function tool_emailtemplate_myprofile_navigation(core_user\output\myprofile\tree
  * @return bool|null false if file not found, does not return anything if found - just send the file
  */
 function tool_emailtemplate_pluginfile($course, $cm, $context, $filearea, $args, $forcedownload) {
-    global $CFG;
+    global $CFG, $DB;
 
     require_once($CFG->libdir . '/filelib.php');
 
@@ -82,6 +82,57 @@ function tool_emailtemplate_pluginfile($course, $cm, $context, $filearea, $args,
         send_stored_file($file, DAYSECS, 0, false, [
             'cacheability' => 'public',
         ]);
+
+    } else if ($filearea === 'avatar') {
+        // Public endpoint serving a user's profile avatar for use in email footers.
+        // No login required - this is intentionally public and only exposes avatar images.
+        // Resolved at serve time so changes to the user's profile picture are reflected.
+        $userid = (int) array_shift($args);
+        $filename = array_shift($args) ?: 'f1';
+
+        // Only allow the known avatar size identifiers.
+        if (!in_array($filename, ['f1', 'f2', 'f3'])) {
+            return false;
+        }
+
+        $usercontext = \context_user::instance($userid, IGNORE_MISSING);
+        if ($usercontext) {
+            $fs = get_file_storage();
+            $file = $fs->get_file($usercontext->id, 'user', 'icon', 0, '/', $filename . '.png');
+            if (!$file) {
+                $file = $fs->get_file($usercontext->id, 'user', 'icon', 0, '/', $filename . '.jpg');
+            }
+            if ($file && !$file->is_directory()) {
+                send_stored_file($file, DAYSECS * 7, 0, false, ['cacheability' => 'public']);
+            }
+        }
+
+        // No local image - fall back to Gravatar if enabled.
+        if (!empty($CFG->enablegravatar)) {
+            $user = $DB->get_record('user', ['id' => $userid], 'id, email', IGNORE_MISSING);
+            if ($user && !empty($user->email)) {
+                $md5 = md5(strtolower(trim($user->email)));
+                $gravatardefault = !empty($CFG->gravatardefaulturl) ? $CFG->gravatardefaulturl : '404';
+                $gravatarurl = "https://www.gravatar.com/avatar/{$md5}?s=100&d=" . urlencode($gravatardefault);
+
+                $curl = new \curl();
+                $curl->setopt(['CURLOPT_FOLLOWLOCATION' => true]);
+                $imagedata = $curl->get($gravatarurl);
+
+                if ($imagedata && !$curl->get_errno()) {
+                    $info = $curl->get_info();
+                    $mimetype = explode(';', $info['content_type'] ?? 'image/jpeg')[0];
+                    \core\session\manager::write_close();
+                    header('Content-Type: ' . $mimetype);
+                    header('Cache-Control: public, max-age=' . DAYSECS);
+                    header('Content-Length: ' . strlen($imagedata));
+                    echo $imagedata;
+                    die;
+                }
+            }
+        }
+
+        return false;
     }
 }
 
