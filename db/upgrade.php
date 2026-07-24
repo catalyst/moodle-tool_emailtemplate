@@ -13,6 +13,7 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+
 /**
  * DB upgrade script.
  *
@@ -32,7 +33,6 @@ function xmldb_tool_emailtemplate_upgrade($oldversion) {
     $dbman = $DB->get_manager();
 
     if ($oldversion < 2024022900) {
-
         // Define table tool_emailtemplate_tracking to be created.
         $table = new xmldb_table('tool_emailtemplate_tracking');
 

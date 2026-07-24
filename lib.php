@@ -34,11 +34,18 @@
  * @return bool
  */
 function tool_emailtemplate_myprofile_navigation(core_user\output\myprofile\tree $tree, $user, $iscurrentuser, $course) {
-    if (has_capability('tool/emailtemplate:view', context_system::instance()) &&
-            !empty(get_config('tool_emailtemplate', 'template'))) {
+    if (
+        has_capability('tool/emailtemplate:view', context_system::instance()) &&
+            !empty(get_config('tool_emailtemplate', 'template'))
+    ) {
         $url = new moodle_url('/admin/tool/emailtemplate/index.php', ['userid' => $user->id]);
-        $node = new core_user\output\myprofile\node('contact', 'emailtemplate',
-            get_string('pluginname', 'tool_emailtemplate'), null, $url);
+        $node = new core_user\output\myprofile\node(
+            'contact',
+            'emailtemplate',
+            get_string('pluginname', 'tool_emailtemplate'),
+            null,
+            $url
+        );
         $tree->add_node($node);
     }
 }
@@ -61,7 +68,6 @@ function tool_emailtemplate_pluginfile($course, $cm, $context, $filearea, $args,
 
     // Email images must be public so no login or capability checks.
     if ($filearea === 'images') {
-
         $fullpath = '/' . $context->id . '/tool_emailtemplate/images/0/' . $args[1];
 
         $fs = get_file_storage();
@@ -82,7 +88,6 @@ function tool_emailtemplate_pluginfile($course, $cm, $context, $filearea, $args,
         send_stored_file($file, DAYSECS, 0, false, [
             'cacheability' => 'public',
         ]);
-
     } else if ($filearea === 'avatar') {
         // Public endpoint serving a user's profile avatar for use in email footers.
         // No login required - this is intentionally public and only exposes avatar images.
@@ -166,13 +171,13 @@ function tool_emailtemplate_update_tracking($info) {
     // Confirm data is formatted correctly and contains the required info.
     $date = date('Y-m-d');
     $datelen = strlen($date);
-    if (strlen($info) < ($datelen + 1) || !str_contains($info, '-')) {
+    if (strlen($info) < ($datelen + 1) || strpos($info, '-') === false) {
         return;
     }
 
     // Grab the user from the username. Doesn't handle cases where it's not unique.
     $username = substr($info, 0, -$datelen - 1);
-    $user = $DB->get_record('user', array('username' => $username));
+    $user = $DB->get_record('user', ['username' => $username]);
     if (empty($user)) {
         return;
     }

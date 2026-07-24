@@ -45,7 +45,7 @@ $PAGE->set_url($url);
 $PAGE->set_heading($pluginname);
 $PAGE->set_title($pluginname);
 $PAGE->navigation->extend_for_user($user);
-$PAGE->navbar->add(get_string('profile'), new moodle_url('/user/profile.php', array('id' => $user->id)));
+$PAGE->navbar->add(get_string('profile'), new moodle_url('/user/profile.php', ['id' => $user->id]));
 $PAGE->navbar->add($pluginname);
 
 // Check for caps.
@@ -58,14 +58,16 @@ $html = $footer->get_html();
 
 echo $OUTPUT->render_from_template('tool_emailtemplate/compose', [
     'footer' => $html,
-    'from' => fullname($user) . ' <' .$user->email . '>',
+    'from' => fullname($user) . ' <' . $user->email . '>',
 ]);
 $rows = substr_count($html, "\n") + 2;
 echo $OUTPUT->notification(get_string('usage', 'tool_emailtemplate'), 'info');
 
-echo html_writer::tag('button',
+echo html_writer::tag(
+    'button',
     $OUTPUT->pix_icon('t/copy', '') . ' ' . get_string('copytoclipboard', 'tool_emailtemplate'),
-    ['id' => 'copy', 'class' => 'btn btn-primary']);
+    ['id' => 'copy', 'class' => 'btn btn-primary']
+);
 echo html_writer::tag('textarea', $html, [
     'id' => 'email-template',
     'rows' => $rows,
@@ -89,4 +91,3 @@ if (has_capability('tool/emailtemplate:manage', context_system::instance())) {
 }
 
 echo $OUTPUT->footer();
-

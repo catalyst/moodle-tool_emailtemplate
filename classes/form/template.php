@@ -74,7 +74,11 @@ class template extends \moodleform {
         $mform->addElement('static', 'global_vars_help', '', get_string('global_vars_desc', 'tool_emailtemplate'));
 
         // Images.
-        $mform->addElement('filemanager', 'images', get_string('images', 'tool_emailtemplate'), null,
+        $mform->addElement(
+            'filemanager',
+            'images',
+            get_string('images', 'tool_emailtemplate'),
+            null,
             $this->get_filemanager_options()
         );
         $mform->addElement('static', 'images_help', '', get_string('imagesdesc', 'tool_emailtemplate'));

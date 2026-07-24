@@ -31,7 +31,6 @@ use core_user\external\user_summary_exporter;
  * A footer
  */
 class footer {
-
     /**
      * @var user
      */
@@ -193,7 +192,7 @@ class footer {
             if (strpos($line, ':') == false) {
                 continue;
             }
-            list($key, $value) = array_map('trim', explode(":", $line, 2));
+            [$key, $value] = array_map('trim', explode(":", $line, 2));
             $vars[$key] = $value;
         }
 
