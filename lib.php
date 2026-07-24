@@ -166,7 +166,7 @@ function tool_emailtemplate_update_tracking($info) {
     // Confirm data is formatted correctly and contains the required info.
     $date = date('Y-m-d');
     $datelen = strlen($date);
-    if (strlen($info) < ($datelen + 1) || !str_contains($info, '-')) {
+    if (strlen($info) < ($datelen + 1) || strpos($info, '-') === false) {
         return;
     }
 
